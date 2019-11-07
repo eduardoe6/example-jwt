@@ -18,12 +18,19 @@ public class JwtProvider {
         var creationTime = new Date();
         var expirationTime = new Date(creationTime.getTime() + (1000 * 60 * 60 * 24 * 100));
 
-         return Jwts.builder()
+        return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(creationTime)
                 .setExpiration(expirationTime)
                 .signWith(SignatureAlgorithm.HS512, TOKEN_KEY)
                 .compact();
+    }
+
+    public String getUserFromToken(String token) {
+        return Jwts.parser().setSigningKey(TOKEN_KEY)
+                .parseClaimsJws(token)
+                .getBody().getSubject();
+
     }
 
 }
