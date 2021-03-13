@@ -27,10 +27,24 @@ public class JwtProvider {
     }
 
     public String getUserFromToken(String token) {
-        return Jwts.parser().setSigningKey(TOKEN_KEY)
-                .parseClaimsJws(token)
-                .getBody().getSubject();
+        return Jwts.parser() // Gets the token conversion object
+                .setSigningKey(TOKEN_KEY) // Defines the key used to decrypt the token
+                .parseClaimsJws(token) // Converts the token
+                .getBody() // Gets the token payload
+                .getSubject(); // Gets the username from the token
 
     }
 
+    public boolean isTokenValid(String token) {
+
+        // Tries to convert the token, if it gets an exception,
+        // it means the token is not valid
+        try {
+            Jwts.parser().setSigningKey(TOKEN_KEY).parseClaimsJws(token);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
 }
